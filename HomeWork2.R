@@ -14,3 +14,17 @@ data %>% ggplot(aes(x = Caratage, y = log(Price_SGD))) + geom_point()
 
 # We are going to use log price since the explanatory variable is better
 data %>% mutate("Log_Price_SGD" = log(Price_SGD))
+
+# For constant variance
+bptest(lm1)
+
+# For independence
+dwtest(lm1, alternative="two.sided")
+
+#or
+Box.test(residuals(lm1))
+
+# For normality
+jarque.bera.test(residuals(lm1))
+
+plot(lm_1)
