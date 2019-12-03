@@ -13,7 +13,10 @@ data %>% ggplot(aes(x = Caratage, y = Price_SGD)) + geom_point()
 data %>% ggplot(aes(x = Caratage, y = log(Price_SGD))) + geom_point()
 
 # We are going to use log price since the explanatory variable is better
-data %>% mutate("Log_Price_SGD" = log(Price_SGD))
+data <- data %>% mutate("Log_Price_SGD" = log(Price_SGD))
+
+lm1 = lm(Log_Price_SGD ~ ., data = data)
+summary(lm1)
 
 # For constant variance
 bptest(lm1)
