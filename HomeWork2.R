@@ -1,5 +1,6 @@
 library(ggplot2)
 library(dplyr)
+library(car)
 
 data <- read.table("./data.txt",quote="\"", comment.char="", stringsAsFactors = T)
 
@@ -21,17 +22,25 @@ data %>% ggplot(aes(x = Caratage, y = log(Price_SGD))) + geom_point(aes(color=Cl
 data <- data %>% mutate("Log_Price_SGD" = log(Price_SGD))
 
 lm1 = lm(Log_Price_SGD ~ ., data = data)
-lm2 = lm(Log_Price_SGD ~ . - InstCert, data = data)
+# lm2 = lm(Log_Price_SGD ~ . - InstCert, data = data) # Model discarding The certificates
 
 summary(lm1)
-summary(lm2)
+# summary(lm2)
 
-anova(lm1, lm2)
-
+# anova(lm1, lm2)
+# They show a visible pattern in the distriubtion along indexes, showing that the model can be improved.
 ## TESTS
 
-# For constant variance
+residualPlot(lm1)
+plot(lm1$residuals) # As we can se, residuals have no mean 0 on every element and variance is not the same.
+outlierTest(lm1) # No stdres with Bonferroni p<0.05 was found in the dataset
+
+# For constant variance -> https://cran.r-project.org/web/packages/olsrr/vignettes/heteroskedasticity.html
 bptest(lm1)
+#ols_test_barlett()
+#ols_test_breusch_pagan()
+#ols_test_score
+#ols_test_f(model)
 
 # For independence
 dwtest(lm1, alternative="two.sided")
