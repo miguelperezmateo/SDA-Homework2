@@ -1,7 +1,7 @@
 library(ggplot2)
 library(dplyr)
 library(car)
-
+library(descriptr)
 data <- read.table("./data.txt",quote="\"", comment.char="", stringsAsFactors = T)
 
 # Rename headers from data
@@ -37,7 +37,7 @@ outlierTest(lm1) # No stdres with Bonferroni p<0.05 was found in the dataset
 
 # For constant variance -> https://cran.r-project.org/web/packages/olsrr/vignettes/heteroskedasticity.html
 bptest(lm1)
-#ols_test_barlett()
+ols_test_barlett(lm1)
 #ols_test_breusch_pagan()
 #ols_test_score
 #ols_test_f(model)
