@@ -128,12 +128,14 @@ lm3 <-
      data = data)
 summary(lm3) 
 
+
 # Is this regression model satisfactory? Yes, it has increased the R^2 and all 
 #the variables are significant except the InstCert as before
 
 # Assumptions of linear regression
 # Linearity: The mean of the response E at each value is a linear function of the Xi.
 # It can be checked through scatter plots, Linearity: Yes
+residualPlot(lm3)
 plot(lm3$residuals)
 
 # Independence: The residuals are independent? No
@@ -160,13 +162,17 @@ summary(lm3)
 # Interpret the interaction parameter med*carat.
 ## First of all the interaction is significant. Besides, it contibutes to the increment of the R square
 ## compared to the previous model. This could because as interacting a variable with 
-## the same variable but segregated in 3 cluster, helps capturing the effect of all the prices variation
+## the same variable but segregated in  3 cluster, helps capturing the effect of all the prices variation
 ## in that cluster, so it reduces the effect of outliers, as the interaction estimate is negative
 ## in the medium and large cluster. Maybe the interaction term is doing the average between the caratage in the cluster.
 
 
 # What can we infer on the incremental pricing of caratage in the 3 clusters?
 ## ?
+#check the coefficient and slope of various clusters.
+data %>% ggplot(aes(x = Caratage, y = Log_Price_SGD, color = CaratageSize)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
 
 # Which is more highly valued: colour or clarity?
 # To see which variable affects more to the price of the diamond, we should
@@ -210,7 +216,9 @@ summary(lm4)
 
 # Assumptions of linear regression
 # Linearity: Yes
+residualPlot(lm4)
 plot(lm4$residuals)
+
 
 # Independence: The residuals are independent? No
 # For independence Durbin-Watson test
@@ -221,7 +229,7 @@ dwtest(lm4, alternative = "two.sided")
 Box.test(lm4$residuals)
 
 # Normality: The probability of the residuals being normal in this model is much lower than the previous one,
-## but the p-value is still being lo 0.143, so we can not ssay the model normality is good, as the skewness is very significant.
+## but the p-value is still being low as 0.143, so we can not ssay the model normality is good, as the skewness is very significant.
 # JarqueBera: https://stats.stackexchange.com/questions/130368/why-do-i-get-this-p-value-doing-the-jarque-bera-test-in-r
 JarqueBera.test(lm4$residuals)
 
@@ -229,7 +237,7 @@ JarqueBera.test(lm4$residuals)
 # P-value low, reject constant variance Ho -> https://stats.stackexchange.com/questions/239060/interpretation-of-breusch-pagan-test-bptest-in-r
 bptest(lm4)
 
-## The second model in terms of validity is better as the equal variance rule is satisfied and th
+## The second model in terms of validity is better as the equal varitm ance rule is satisfied and th
 ## normality probability is much higher than the previous model, but in both models the independence assumptiuon is not valid.
 ## With respect of the interpretability, as in the second model an interaction term is not being added, is much interpretable,
 ## as it could be interpreted as the price increases exponentially with the square of carat.
